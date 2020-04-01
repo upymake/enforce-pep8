@@ -16,8 +16,9 @@
 # Enforce PEP-8
 
 > Package allows to enforce certain kinds of PEP-8 convention coding styles (or perform overall code diagnostics).
->
 > It aims to help maintain programmers sanity while making any code changes.
+>
+> Most important that package enforces you to write **_clear_** and **_concise pythonic_** code.
 
 ## Tools
 
@@ -56,6 +57,11 @@ Or using direct source:
 ## Development notes
 
 ### Testing
+
+Please execute command below to run unittests with `pytest` tool:
+```bash
+➜ pytest
+```
 
 ### CI
 
