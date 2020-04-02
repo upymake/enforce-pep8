@@ -43,6 +43,54 @@ Please run following script to obtain latest package from PYPI:
 ```
 ### Quick start
 
+**Bad class name**: lowercase class name is defined
+```python
+>>> from punish.style import AbstractStyle
+>>>
+>>> class stylish(AbstractStyle):
+...     def name(self) -> None:
+...         pass
+...
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  punish.style.BadClassNameError
+Class name 'stylish' specified in lowercase. Consider to use camelcase style!
+```
+
+**Bad attribute name**: camelcase method name is defined
+```python
+>>> from punish.style import AbstractStyle
+>>>
+>>> class Stylish(AbstractStyle):
+...     def showName(self) -> None:
+...         pass
+...
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  punish.style.BadAttributeNameError
+Bad attribute name is specified: 'Stylish:showName'. Consider to use lowercase style: 'Stylish:showname'! 
+```
+
+**Bad method signature**: method signature mismatch within base and child classes
+```python
+>>> from punish.style import AbstractStyle
+>>>
+>>> class Stylish(AbstractStyle):
+...     def show(self, indent: str = ":") -> str:
+...         pass
+...
+...
+... class SoStylish(Stylish):
+...     def show(self, indent: str = ":", not_expected_argument: bool = False) -> str:
+...         pass
+...
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  punish.style.SignatureError
+Signature mismatch in 'SoStylish.show', 
+(self, indent: str = ':') -> str != (self, indent: str = ':', not_expected_argument: bool = False) -> str 
+```
+
 ### Source code
 
 ```bash
