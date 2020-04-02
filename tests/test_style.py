@@ -1,4 +1,4 @@
-from punish.style import BadAttributeNameError, NoMixedCaseMeta
+from punish.style import BadAttributeNameError, MatchSignatureMeta, NoMixedCaseMeta, SignatureError
 import pytest
 
 
@@ -15,4 +15,28 @@ def test_mixed_case_meta() -> None:
 
         class MixedCase(metaclass=NoMixedCaseMeta):
             def badName(self) -> None:
+                pass
+
+
+def test_correct_signature() -> None:
+    class Base(metaclass=MatchSignatureMeta):
+        def check(self, name: str, value: str) -> None:
+            pass
+
+    class Sub(Base):
+        def check(self, name: str, value: str) -> None:
+            pass
+
+    assert Sub()
+
+
+def test_wrong_signature() -> None:
+    class Base(metaclass=MatchSignatureMeta):
+        def check(self, name: str, value: str) -> None:
+            pass
+
+    with pytest.raises(SignatureError):
+
+        class Sub(Base):
+            def check(self, name: str, value: str, keyword: bool = False) -> None:
                 pass
