@@ -143,3 +143,12 @@ You can reach out me at:
 4. `pip install -r requirements-dev.txt` to install all development project dependencies
 
 **[⬆ back to top](#enforce-pep-8)**
+
+## What's next
+
+Project is inspired mainly by **pythonic** PEP8 code style reflected at https://www.python.org/dev/peps/pep-0008.
+Also decent ideas are described in https://github.com/zedr/clean-code-python project.
+
+In general, future releases will contain API implementations from mentioned style guides above.
+
+**[⬆ back to top](#enforce-pep-8)**
