@@ -8,4 +8,5 @@ max-function-length = 30
 statistics = True
 count = True
 eradicate-aggressive = True
+pytest-parametrize-values-type = tuple
 ignore = I201

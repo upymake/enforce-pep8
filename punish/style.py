@@ -56,7 +56,7 @@ class NoMixedCaseMeta(type):
             class_dict (dict): class namespace as a dictionary
 
         Raises:
-            `BadAttributeNameError` if name of an attribute is specified in camel-case style e.g fooBar
+            `BadAttributeNameError` if name of an attribute is specified in camelcase style e.g fooBar
         """
         for attribute_name in class_dict:  # type: str
             if attribute_name.lower() != attribute_name:
@@ -76,7 +76,7 @@ class NoLowerCaseMeta(type):
             class_dict (dict): class namespace as a dictionary
 
         Raises:
-            `BadClassNameError` if name of a class is specified in lower-case style e.g foo
+            `BadClassNameError` if name of a class is specified in lowercase style e.g foo
         """
         if class_name[0].islower() or class_name.islower():
             raise BadClassNameError(class_name)
@@ -112,3 +112,35 @@ class MatchSignatureMeta(type):
                 current_signature: Signature = signature(value)
                 if previous_signature != current_signature:
                     raise SignatureError(value.__qualname__, previous_signature, current_signature)
+
+
+class StyleMeta(NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta):
+    """A metaclass forces PEP-8 convention coding styles.
+
+    Examines the contents of a class at the time of definition.
+    Enforces certain kinds of coding conventions to help maintains programmer sanity.
+
+    In general, following items are forbidden:
+      - define camel-case attribute & method names
+      - define lower-case
+      - redefine methods with wrong signature
+
+    It will raise corresponding exception while class definition procedure.
+    """
+
+    pass
+
+
+class AbstractStyle(metaclass=StyleMeta):
+    """The class represents abstract base class to enforce PEP8 coding style conventions.
+
+    Derive from it to make PEP8 coding punishment (it will make effect while definition) e.g:
+
+        class Root(AbstractStyle):
+            ...
+
+        class Child(Root):
+            ...
+    """
+
+    pass
