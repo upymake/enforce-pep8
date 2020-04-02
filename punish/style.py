@@ -21,6 +21,16 @@ class BadAttributeNameError(Exception):
         )
 
 
+class BadClassNameError(Exception):
+    """The class represents bad class name exception.
+
+    Commonly occurred when attribute name is out of PEP8 scope.
+    """
+
+    def __init__(self, class_name: str) -> None:
+        super().__init__(f"Class name '{class_name}' specified in lowercase. Consider to use camelcase style!")
+
+
 class SignatureError(Exception):
     """The class method signature exception.
 
@@ -54,6 +64,25 @@ class NoMixedCaseMeta(type):
         return super().__new__(mcs, class_name, bases, class_dict)
 
 
+class NoLowerCaseMeta(type):
+    """A metaclass that rejects any class definition containing classes with lower-case names."""
+
+    def __new__(mcs, class_name: str, bases: Tuple[type, ...], class_dict: Dict[str, Any]) -> Any:
+        """Creates and returns new PEP-8 verified object.
+
+        Args:
+            class_name (str): name of a class to be created
+            bases (tuple): a set of base classes inherited from
+            class_dict (dict): class namespace as a dictionary
+
+        Raises:
+            `BadClassNameError` if name of a class is specified in lower-case style e.g foo
+        """
+        if class_name[0].islower() or class_name.islower():
+            raise BadClassNameError(class_name)
+        return super().__new__(mcs, class_name, bases, class_dict)
+
+
 class MatchSignatureMeta(type):
     """A metaclass that checks the definition of redefined methods.
 
@@ -62,6 +91,16 @@ class MatchSignatureMeta(type):
     """
 
     def __init__(cls, class_name: str, bases: Tuple[type, ...], class_dict: Dict[str, Any]) -> None:
+        """Instantiates new PEP-8 verified object.
+
+        Args:
+            class_name (str): name of a class to be created
+            bases (tuple): a set of base classes inherited from
+            class_dict (dict): class namespace as a dictionary
+
+        Raises:
+            `SignatureError` if method signatures of base and super classes don't match
+        """
         super().__init__(class_name, bases, class_dict)
         parent: super = super(cls, cls)
         for name, value in class_dict.items():  # type: str, type

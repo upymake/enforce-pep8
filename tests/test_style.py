@@ -1,4 +1,11 @@
-from punish.style import BadAttributeNameError, MatchSignatureMeta, NoMixedCaseMeta, SignatureError
+from punish.style import (
+    BadAttributeNameError,
+    BadClassNameError,
+    MatchSignatureMeta,
+    NoLowerCaseMeta,
+    NoMixedCaseMeta,
+    SignatureError,
+)
 import pytest
 
 
@@ -18,7 +25,7 @@ def test_mixed_case_meta() -> None:
                 pass
 
 
-def test_correct_signature() -> None:
+def test_match_signature_meta() -> None:
     class Base(metaclass=MatchSignatureMeta):
         def check(self, name: str, value: str) -> None:
             pass
@@ -30,7 +37,7 @@ def test_correct_signature() -> None:
     assert Sub()
 
 
-def test_wrong_signature() -> None:
+def test_no_match_signature_meta() -> None:
     class Base(metaclass=MatchSignatureMeta):
         def check(self, name: str, value: str) -> None:
             pass
@@ -40,3 +47,17 @@ def test_wrong_signature() -> None:
         class Sub(Base):
             def check(self, name: str, value: str, keyword: bool = False) -> None:
                 pass
+
+
+def test_no_lower_case_meta() -> None:
+    class NoLowerCase(metaclass=NoLowerCaseMeta):
+        pass
+
+    assert NoLowerCase()
+
+
+def test_lower_case_meta() -> None:
+    with pytest.raises(BadClassNameError):
+
+        class lowercase(metaclass=NoLowerCaseMeta):
+            pass

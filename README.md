@@ -15,10 +15,12 @@
 
 # Enforce PEP-8
 
-> Package allows to enforce certain kinds of PEP-8 convention coding styles (or perform overall code diagnostics).
+> Package allows to enforce certain kinds of **PEP-8** convention coding styles (or perform overall code diagnostics).
 > It aims to help maintain programmers sanity while making any code changes.
->
-> Most important that package enforces you to write **_clear_** and **_concise pythonic_** code.
+> In large object-oriented programs, it can sometimes be useful to put class definitions under control of a metaclass
+> that are used to alert programmers to potential problems.
+> 
+> Most important that package enforces you to write **clear** and **concise pythonic** code.
 
 ## Tools
 
