@@ -5,8 +5,9 @@ from punish.style import (
     MatchSignatureMeta,
     NoLowerCaseMeta,
     NoMixedCaseMeta,
+    PepStyleMeta,
     SignatureError,
-    StyleMeta,
+    SingletonMeta,
 )
 import pytest
 
@@ -67,7 +68,7 @@ def test_lower_case_meta() -> None:
 
 @pytest.mark.parametrize("object_type", (type, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta))
 def test_style_meta_instance(object_type: type) -> None:
-    assert isinstance(StyleMeta("Stylish", (), {}), object_type)
+    assert isinstance(PepStyleMeta("Stylish", (), {}), object_type)
 
 
 def test_abstract_style_lower_case():
@@ -95,3 +96,17 @@ def test_abstract_style_signature():
         class SoStylish(Stylish):
             def check(self, name: str, not_expected_argument: str) -> None:
                 pass
+
+
+def test_not_singleton_meta() -> None:
+    class NotSingleton:
+        pass
+
+    assert NotSingleton() is not NotSingleton()
+
+
+def test_singleton_meta() -> None:
+    class Singleton(metaclass=SingletonMeta):
+        pass
+
+    assert Singleton() is Singleton() is Singleton()

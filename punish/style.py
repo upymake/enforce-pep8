@@ -5,7 +5,7 @@ Allows to examine the contents of a class at the time of definition.
 Once a PEP8 metaclass has been specified for a class, it gets inherited by all of the subclasses.
 """
 from inspect import Signature, signature
-from typing import Any, Callable, Dict, Tuple
+from typing import Any, Callable, Dict, Optional, Tuple
 
 
 class BadAttributeNameError(Exception):
@@ -47,40 +47,40 @@ class NoMixedCaseMeta(type):
     Perhaps as a means for annoying Java/javaScript/etc. programmers.
     """
 
-    def __new__(mcs, class_name: str, bases: Tuple[type, ...], class_dict: Dict[str, Any]) -> Any:
+    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
         """Creates and returns new PEP-8 verified object.
 
         Args:
             class_name (str): name of a class to be created
             bases (tuple): a set of base classes inherited from
-            class_dict (dict): class namespace as a dictionary
+            namespace (dict): class namespace as a dictionary
 
         Raises:
             `BadAttributeNameError` if name of an attribute is specified in camelcase style e.g fooBar
         """
-        for attribute_name in class_dict:  # type: str
+        for attribute_name in namespace:  # type: str
             if attribute_name.lower() != attribute_name:
                 raise BadAttributeNameError(class_name, attribute_name)
-        return super().__new__(mcs, class_name, bases, class_dict)
+        return super().__new__(mcs, class_name, bases, namespace)
 
 
 class NoLowerCaseMeta(type):
     """A metaclass that rejects any class definition containing classes with lower-case names."""
 
-    def __new__(mcs, class_name: str, bases: Tuple[type, ...], class_dict: Dict[str, Any]) -> Any:
+    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
         """Creates and returns new PEP-8 verified object.
 
         Args:
             class_name (str): name of a class to be created
             bases (tuple): a set of base classes inherited from
-            class_dict (dict): class namespace as a dictionary
+            namespace (dict): class namespace as a dictionary
 
         Raises:
             `BadClassNameError` if name of a class is specified in lowercase style e.g foo
         """
         if class_name[0].islower() or class_name.islower():
             raise BadClassNameError(class_name)
-        return super().__new__(mcs, class_name, bases, class_dict)
+        return super().__new__(mcs, class_name, bases, namespace)
 
 
 class MatchSignatureMeta(type):
@@ -90,20 +90,20 @@ class MatchSignatureMeta(type):
     Useful in catching subtle program bugs in argument names.
     """
 
-    def __init__(cls, class_name: str, bases: Tuple[type, ...], class_dict: Dict[str, Any]) -> None:
+    def __init__(cls, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> None:
         """Instantiates new PEP-8 verified object.
 
         Args:
             class_name (str): name of a class to be created
             bases (tuple): a set of base classes inherited from
-            class_dict (dict): class namespace as a dictionary
+            namespace (dict): class namespace as a dictionary
 
         Raises:
             `SignatureError` if method signatures of base and super classes don't match
         """
-        super().__init__(class_name, bases, class_dict)
+        super().__init__(class_name, bases, namespace)
         parent: super = super(cls, cls)
-        for name, value in class_dict.items():  # type: str, type
+        for name, value in namespace.items():  # type: str, type
             if name.startswith("_") or not callable(value):
                 continue
             previous_defined: Callable[[], Any] = getattr(parent, name, None)
@@ -114,7 +114,7 @@ class MatchSignatureMeta(type):
                     raise SignatureError(value.__qualname__, previous_signature, current_signature)
 
 
-class StyleMeta(NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta):
+class PepStyleMeta(NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta):
     """A metaclass forces PEP-8 convention coding styles.
 
     Examines the contents of a class at the time of definition.
@@ -131,16 +131,58 @@ class StyleMeta(NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta):
     pass
 
 
-class AbstractStyle(metaclass=StyleMeta):
+class AbstractStyle(metaclass=PepStyleMeta):
     """The class represents abstract base class to enforce PEP8 coding style conventions.
 
     Derive from it to make PEP8 coding punishment (it will make effect while definition) e.g:
 
-        class Root(AbstractStyle):
-            ...
-
-        class Child(Root):
-            ...
+    >>> class Root(AbstractStyle):
+    ...    pass
+    ...
+    ...
+    ...  class Child(Root):
+    ...    pass
+    ...
+    >>>
     """
 
     pass
+
+
+class SingletonMeta(type):
+    """A metaclass that makes from class object a singleton unity.
+
+    It will be instantiated only once.
+    """
+
+    def __init__(cls, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> None:
+        """Initializes a singleton object.
+
+        Args:
+            class_name (str): name of a class to be created
+            bases (tuple): a set of base classes inherited from
+            namespace (dict): class namespace as a dictionary
+        """
+        cls.__instance: Optional["SingletonMeta"] = None
+        super().__init__(class_name, bases, namespace)
+
+    def __call__(cls, *args: Any, **kwargs: Any) -> "SingletonMeta":
+        """Calls an instance of a singleton.
+
+        Calling when instance is created e.g:
+
+        >>> class Foo(metaclass=SingletonMeta):
+        ...     pass
+        ...
+        >>> foo = Foo()  # `__call__` metaclass method is called here
+        <__main__.Foo object at 0x1064bb220>
+        >>>
+
+        Args:
+            args (Any): positional arguments
+            kwargs (Any): keyword arguments
+        """
+        if cls.__instance is None:
+            cls.__instance = super().__call__(*args, **kwargs)
+            return cls.__instance
+        return cls.__instance
