@@ -13,18 +13,33 @@ import pytest
 
 
 def test_no_mixed_case_meta() -> None:
-    class NoMixedCase(metaclass=NoMixedCaseMeta):
+    class SnakeCaseMethod(metaclass=NoMixedCaseMeta):
         def good_name(self) -> None:
             pass
 
-    assert NoMixedCase()
+    class Constant(metaclass=NoMixedCaseMeta):
+        GOODNAME: str = "foo"
+
+    assert SnakeCaseMethod()
+    assert Constant()
 
 
 def test_mixed_case_meta() -> None:
     with pytest.raises(BadAttributeNameError):
 
-        class MixedCase(metaclass=NoMixedCaseMeta):
+        class CamelCaseMethod(metaclass=NoMixedCaseMeta):
             def badName(self) -> None:
+                pass
+
+    with pytest.raises(BadAttributeNameError):
+
+        class CamelCaseVariable(metaclass=NoMixedCaseMeta):
+            badName: str = "foo"
+
+    with pytest.raises(BadAttributeNameError):
+
+        class ConstantMethod(metaclass=NoMixedCaseMeta):
+            def BADNAME(self) -> None:
                 pass
 
 

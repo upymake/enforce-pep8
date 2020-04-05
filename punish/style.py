@@ -4,6 +4,7 @@ Allows to examine the contents of a class at the time of definition.
 
 Once a PEP8 metaclass has been specified for a class, it gets inherited by all of the subclasses.
 """
+import re
 from inspect import Signature, signature
 from typing import Any, Callable, Dict, Optional, Tuple
 
@@ -42,10 +43,12 @@ class SignatureError(Exception):
 
 
 class NoMixedCaseMeta(type):
-    """A metaclass that rejects any class definition containing attributes with mixed-case names.
+    """A metaclass that rejects any class definition containing attributes with mixed names.
 
     Perhaps as a means for annoying Java/javaScript/etc. programmers.
     """
+
+    __camelcase_pattern: str = "([a-z]+[A-Z]+).*"
 
     def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
         """Creates and returns new PEP-8 verified object.
@@ -58,9 +61,9 @@ class NoMixedCaseMeta(type):
         Raises:
             `BadAttributeNameError` if name of an attribute is specified in camelcase style e.g fooBar
         """
-        for attribute_name in namespace:  # type: str
-            if attribute_name.lower() != attribute_name:
-                raise BadAttributeNameError(class_name, attribute_name)
+        for attr_name, value in namespace.items():  # type: str, Any
+            if re.compile(mcs.__camelcase_pattern).match(attr_name) or (attr_name.isupper() and callable(value)):
+                raise BadAttributeNameError(class_name, attr_name)
         return super().__new__(mcs, class_name, bases, namespace)
 
 
