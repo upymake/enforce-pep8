@@ -1,6 +1,11 @@
 Versions
 ========
 
+0.0.2 (06.04.2020)
+========
+- Fix const attributes raise 'BadAttributeNameError' exception
+- Implement singleton metaclass
+
 0.0.1 (02.04.2020)
 ========
 - Describe quick start usage
