@@ -29,7 +29,9 @@ class BadClassNameError(Exception):
     """
 
     def __init__(self, class_name: str) -> None:
-        super().__init__(f"Class name '{class_name}' specified in lowercase. Consider to use camelcase style!")
+        super().__init__(
+            f"Class name '{class_name}' specified in lowercase. Consider to use camelcase style!"
+        )
 
 
 class SignatureError(Exception):
@@ -38,8 +40,12 @@ class SignatureError(Exception):
     Commonly occurred when attribute name is out of PEP8 scope.
     """
 
-    def __init__(self, class_name: str, previous_signature: Signature, current_signature: Signature) -> None:
-        super().__init__(f"Signature mismatch in '{class_name}', {previous_signature} != {current_signature}")
+    def __init__(
+        self, class_name: str, previous_signature: Signature, current_signature: Signature
+    ) -> None:
+        super().__init__(
+            f"Signature mismatch in '{class_name}', {previous_signature} != {current_signature}"
+        )
 
 
 class NoMixedCaseMeta(type):
@@ -62,7 +68,9 @@ class NoMixedCaseMeta(type):
             `BadAttributeNameError` if name of an attribute is specified in camelcase style e.g fooBar
         """
         for attr_name, value in namespace.items():  # type: str, Any
-            if re.compile(mcs.__camelcase_pattern).match(attr_name) or (attr_name.isupper() and callable(value)):
+            if re.compile(mcs.__camelcase_pattern).match(attr_name) or (
+                attr_name.isupper() and callable(value)
+            ):
                 raise BadAttributeNameError(class_name, attr_name)
         return super().__new__(mcs, class_name, bases, namespace)
 

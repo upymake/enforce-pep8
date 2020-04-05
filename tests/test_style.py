@@ -81,7 +81,9 @@ def test_lower_case_meta() -> None:
             pass
 
 
-@pytest.mark.parametrize("object_type", (type, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta))
+@pytest.mark.parametrize(
+    "object_type", (type, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta)
+)
 def test_style_meta_instance(object_type: type) -> None:
     assert isinstance(PepStyleMeta("Stylish", (), {}), object_type)
 
