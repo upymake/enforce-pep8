@@ -3,7 +3,9 @@
 Allows to examine the contents of a class at the time of definition.
 """
 from collections import OrderedDict
-from typing import Any, Dict, List, Tuple, Type
+from functools import wraps
+from inspect import Signature, signature
+from typing import Any, Callable, Dict, List, Tuple, Type
 
 
 class Typed:
@@ -111,3 +113,51 @@ class OrderTypedMeta(type):
             bases (tuple): a set of base classes inherited from
         """
         return OrderedDict()
+
+
+def enforce_type(*type_args: Any, **type_kwargs: Any) -> Callable[[Any], Any]:
+    """Decorator enforces arguments type checking procedure.
+
+    Args:
+        type_args (Any): positional arguments
+        type_kwargs (Any): keyword arguments
+
+    Example:
+        >>> @enforce_type(int, bool, tez=int)
+        ... def spam(foo: int, bar: int, tez: int = 42) -> None:
+        ...     pass
+        ...
+        ...
+        ... @enforce_type(bool, int)
+        ... class Spam:
+        ...      def __init__(self, foo: int, bar: int) -> None:
+        ...          self._foo = foo
+        ...          self._bar = bar
+        ...
+        >>> spam(1, 10)  # raise `TypeError`
+        >>> new_spam: Spam = Spam(10, 20)  # raise `TypeError`
+    """
+
+    def decorator(func: Callable[[Any], Any]) -> Callable[[Any], Any]:
+
+        if not __debug__:
+            return func
+
+        expected_signature: Signature = signature(func)
+        bound_types: Dict[str, Any] = expected_signature.bind_partial(
+            *type_args, **type_kwargs
+        ).arguments
+
+        @wraps(func)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            for name, value in expected_signature.bind(
+                *args, **kwargs
+            ).arguments.items():  # type: str, Any
+                if name in bound_types:
+                    if not isinstance(value, bound_types[name]):
+                        raise TypeError(f"Argument '{name}' must be '{bound_types[name]}' type")
+            return func(*args, **kwargs)  # type: ignore
+
+        return wrapper
+
+    return decorator

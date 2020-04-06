@@ -1,4 +1,5 @@
-from punish.type import Float, Integer, OrderTypedMeta, String, Typed
+from typing import Any, Dict
+from punish.type import Float, Integer, OrderTypedMeta, String, Typed, enforce_type
 import pytest
 
 
@@ -28,3 +29,36 @@ def test_correctly_typed() -> None:
 def test_badly_typed(evaluated_type: callable) -> None:
     with pytest.raises(TypeError):
         evaluated_type()
+
+
+def test_enforce_good_type() -> None:
+    @enforce_type(foo=bool, bar=int, tez=int)
+    def spam(foo: bool, bar: int, tez: int = 42) -> Dict[str, Any]:  # noqa: VNE002
+        return locals()
+
+    @enforce_type(foo=bool, bar=int)
+    class Spam:
+        def __init__(self, foo: bool, bar: int) -> None:  # noqa: VNE002
+            self._foo = foo
+            self._bar = bar
+
+    assert spam(True, 10)
+    assert Spam(True, 10)
+
+
+def test_enforce_bad_type() -> None:
+    @enforce_type(foo=bool, bar=int, tez=int)
+    def spam(foo: bool, bar: int, tez: int = 42) -> Dict[str, Any]:  # noqa: VNE002
+        return locals()
+
+    with pytest.raises(TypeError):
+        spam(None, 10)
+
+    @enforce_type(foo=bool, bar=int)
+    class Spam:
+        def __init__(self, foo: bool, bar: int) -> None:  # noqa: VNE002
+            self._foo = foo
+            self._bar = bar
+
+    with pytest.raises(TypeError):
+        Spam(None, 10)
