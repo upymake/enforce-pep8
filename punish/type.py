@@ -103,7 +103,7 @@ class OrderTypedMeta(type):
     ) -> Dict[str, Any]:
         """Creates class namespace.
 
-        Invoked immediately at the start of a class definition
+        Invoked immediately at the start of a class definition.
         Namespace dictionary is returned.
 
         Returns `OrderedDict` instead of ordinary dictionary

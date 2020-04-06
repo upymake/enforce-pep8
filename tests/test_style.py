@@ -2,7 +2,9 @@ from punish.style import (
     AbstractStyle,
     BadAttributeNameError,
     BadClassNameError,
+    DuplicateAttributeError,
     MatchSignatureMeta,
+    NoDuplicateMeta,
     NoLowerCaseMeta,
     NoMixedCaseMeta,
     PepStyleMeta,
@@ -81,8 +83,31 @@ def test_lower_case_meta() -> None:
             pass
 
 
+def test_no_duplicate_meta() -> None:
+    class Spam(metaclass=NoDuplicateMeta):
+        def name(self) -> None:
+            pass
+
+        def age(self) -> None:
+            pass
+
+    assert Spam()
+
+
+def test_duplicate_meta() -> None:
+
+    with pytest.raises(DuplicateAttributeError):
+
+        class Spam(metaclass=NoDuplicateMeta):
+            def name(self) -> None:
+                pass
+
+            def name(self) -> None:  # noqa: F811
+                pass
+
+
 @pytest.mark.parametrize(
-    "object_type", (type, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta)
+    "object_type", (type, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta, NoDuplicateMeta)
 )
 def test_style_meta_instance(object_type: type) -> None:
     assert isinstance(PepStyleMeta("Stylish", (), {}), object_type)
@@ -112,6 +137,16 @@ def test_abstract_style_signature():
 
         class SoStylish(Stylish):
             def check(self, name: str, not_expected_argument: str) -> None:
+                pass
+
+
+def test_abstract_style_duplicate() -> None:
+    with pytest.raises(DuplicateAttributeError):
+        class Stylish(AbstractStyle):
+            def name(self) -> None:
+                pass
+
+            def name(self) -> None:  # noqa: F811
                 pass
 
 

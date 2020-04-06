@@ -94,6 +94,23 @@ Signature mismatch in 'SoStylish.show',
 (self, indent: str = ':') -> str != (self, indent: str = ':', not_expected_argument: bool = False) -> str 
 ```
 
+**Duplicated attribute name**: defined two methods with same name
+```python
+from punish.style import AbstractStyle
+
+
+class Stylish(AbstractStyle):
+    def name(self) -> None:
+        pass
+
+    def name(self) -> None:
+        pass
+
+Traceback (most recent call last):
+  File "<stdin>", line 5, in Stylish
+punish.style.DuplicateAttributeError: 'name' attribute is already defined in 'Stylish' class
+```
+
 **Bad argument type**: not expected type is passed to the argument
 ```python
 from punish.type import OrderTypedMeta, String, Typed

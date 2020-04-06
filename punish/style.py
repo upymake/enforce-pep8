@@ -5,6 +5,7 @@ Allows to examine the contents of a class at the time of definition.
 Once a PEP8 metaclass has been specified for a class, it gets inherited by all of the subclasses.
 """
 import re
+from collections import OrderedDict
 from inspect import Signature, signature
 from typing import Any, Callable, Dict, Optional, Tuple
 
@@ -46,6 +47,16 @@ class SignatureError(Exception):
         super().__init__(
             f"Signature mismatch in '{class_name}', {previous_signature} != {current_signature}"
         )
+
+
+class DuplicateAttributeError(Exception):
+    """The class represents duplicated attribute exception.
+
+    Commonly occurred when attribute name is out of PEP8 scope.
+    """
+
+    def __init__(self, attribute_name: str, class_name: str) -> None:
+        super().__init__(f"'{attribute_name}' attribute is already defined in '{class_name}' class")
 
 
 class NoMixedCaseMeta(type):
@@ -125,7 +136,70 @@ class MatchSignatureMeta(type):
                     raise SignatureError(value.__qualname__, previous_signature, current_signature)
 
 
-class PepStyleMeta(NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta):
+class NoDuplicateDict(OrderedDict):  # type: ignore
+    """Represents no duplicated ordered dictionary."""
+
+    def __init__(self, class_name: str) -> None:
+        self._class_name = class_name
+        super().__init__()
+
+    def __setitem__(self, attribute_name: str, value: Any) -> None:
+        """Sets given name to value into class namespace.
+
+        Args:
+            attribute_name (str): name of an attribute
+            value (Any): name of a value
+
+        Raises:
+            `DuplicatedAttributeError` if name is already defined in class namespace
+        """
+        if attribute_name in self:
+            raise DuplicateAttributeError(attribute_name, self._class_name)
+        super().__setitem__(attribute_name, value)
+
+
+class NoDuplicateMeta(type):
+    """A metaclass rejects defined duplicated attributes in a class."""
+
+    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
+        """Creates and returns new object.
+
+        Args:
+            class_name (str): name of a class to be created
+            bases (tuple): a set of base classes inherited from
+            namespace (dict): class namespace as a dictionary
+
+        Example:
+            >>> class Spam(metaclass=NoDuplicateMeta):
+            ...     def name(self) -> None:
+            ...         pass
+            ...
+            ...     def name(self) -> None:
+            ...         pass
+            ...
+            ... TypeError: 'name' attribute is already defined in 'Spam' class
+        """
+        from_namespace: Dict[str, Any] = dict(namespace)
+        from_namespace["_order"] = [name for name in namespace if not name.startswith("_")]
+        return type.__new__(mcs, class_name, bases, from_namespace)
+
+    @classmethod  # noqa: U100
+    def __prepare__(  # type: ignore # noqa: U100
+        mcs, class_name: str, bases: Tuple[type, ...]  # pylint: disable=unused-argument
+    ) -> Dict[str, Any]:
+        """Creates class namespace.
+
+        Invoked immediately at the start of a class definition.
+        Namespace dictionary is returned.
+
+        Args:
+            class_name (str): name of a class to be created
+            bases (tuple): a set of base classes inherited from
+        """
+        return NoDuplicateDict(class_name)
+
+
+class PepStyleMeta(NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta, NoDuplicateMeta):
     """A metaclass forces PEP-8 convention coding styles.
 
     Examines the contents of a class at the time of definition.
@@ -135,6 +209,7 @@ class PepStyleMeta(NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta):
       - define camel-case attribute & method names
       - define lower-case
       - redefine methods with wrong signature
+      - duplicated attributes
 
     It will raise corresponding exception while class definition procedure.
     """
