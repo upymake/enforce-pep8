@@ -38,19 +38,20 @@
 
 Please run following script to obtain latest package from PYPI:
 ```bash
-➜ pip install enforce-pep8
+pip install enforce-pep8
 ✨ 🍰 ✨
 ```
 ### Quick start
 
 **Bad class name**: lowercase class name is defined
 ```python
->>> from punish.style import AbstractStyle
->>>
->>> class stylish(AbstractStyle):
-...     def name(self) -> None:
-...         pass
-...
+from punish.style import AbstractStyle
+
+
+class stylish(AbstractStyle):
+     def name(self) -> None:
+         pass
+
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
   punish.style.BadClassNameError
@@ -59,12 +60,13 @@ Class name 'stylish' specified in lowercase. Consider to use camelcase style!
 
 **Bad attribute name**: camelcase method name is defined
 ```python
->>> from punish.style import AbstractStyle
->>>
->>> class Stylish(AbstractStyle):
-...     def showName(self) -> None:
-...         pass
-...
+from punish.style import AbstractStyle
+
+
+class Stylish(AbstractStyle):
+     def showName(self) -> None:
+         pass
+
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
   punish.style.BadAttributeNameError
@@ -73,17 +75,18 @@ Bad attribute name is specified: 'Stylish:showName'. Consider to use lowercase s
 
 **Bad method signature**: method signature mismatch within base and child classes
 ```python
->>> from punish.style import AbstractStyle
->>>
->>> class Stylish(AbstractStyle):
-...     def show(self, indent: str = ":") -> str:
-...         pass
-...
-...
-... class SoStylish(Stylish):
-...     def show(self, indent: str = ":", not_expected_argument: bool = False) -> str:
-...         pass
-...
+from punish.style import AbstractStyle
+
+
+class Stylish(AbstractStyle):
+     def show(self, indent: str = ":") -> str:
+         pass
+
+
+class SoStylish(Stylish):
+    def show(self, indent: str = ":", not_expected_argument: bool = False) -> str:
+        pass
+
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
   punish.style.SignatureError
@@ -91,16 +94,35 @@ Signature mismatch in 'SoStylish.show',
 (self, indent: str = ':') -> str != (self, indent: str = ':', not_expected_argument: bool = False) -> str 
 ```
 
+**Bad argument type**: not expected type is passed to the argument
+```python
+from punish.type import OrderTypedMeta, String, Typed
+
+
+class Car(metaclass=OrderTypedMeta):
+    color: Typed = String()
+ 
+    def __init__(self, color: str) -> None:
+        self.color = color
+
+
+car: Car = Car(color=23)
+
+Traceback (most recent call last):
+  File "<stdin>", line 5, in __init__
+TypeError: Expected '<class 'str'>' type for 'color' attribute
+```
+
 ### Source code
 
 ```bash
-➜ git clone git@github.com:vyahello/enforce-pep8.git
-➜ pip install -e .
+git clone git@github.com:vyahello/enforce-pep8.git
+pip install -e .
 ```
 
 Or using direct source:
 ```bash
-➜ pip install git+https://github.com/vyahello/enforce-pep8@0.0.1
+pip install git+https://github.com/vyahello/enforce-pep8@0.0.1
 ```
 **[⬆ back to top](#enforce-pep-8)**
 
@@ -110,7 +132,7 @@ Or using direct source:
 
 Please execute command below to run unittests with `pytest` tool:
 ```bash
-➜ pytest
+pytest
 ```
 
 ### CI
@@ -119,7 +141,7 @@ Project has Travis CI integration using [.travis.yml](.travis.yml) file thus cod
 
 To be able to run code analysis, please execute command below:
 ```bash
-➜ ./analyse-source-code.sh
+./analyse-source-code.sh
 ```
 ### Release notes
 
