@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from punish.type import Float, Integer, OrderTypedMeta, String, Typed, enforce_type
+from punish.type import Float, Integer, OrderTypedMeta, String, Typed, enforce_type, typed_property
 import pytest
 
 
@@ -62,3 +62,26 @@ def test_enforce_bad_type() -> None:
 
     with pytest.raises(TypeError):
         Spam(None, 10)
+
+
+def test_nicely_typed_property() -> None:
+    class Person:
+        age: property = typed_property("age", int)
+
+        def __init__(self, age: int) -> None:
+            self._age = age
+
+    person: Person = Person(age=20)
+    person.age = 21
+    assert person.age == 21
+
+
+def test_badly_typed_property() -> None:
+    class Person:
+        age: property = typed_property("age", int)
+
+        def __init__(self, age: int) -> None:
+            self._age = age
+
+    with pytest.raises(TypeError):
+        Person(age=20).age = None

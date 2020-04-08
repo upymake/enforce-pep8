@@ -161,3 +161,54 @@ def enforce_type(*type_args: Any, **type_kwargs: Any) -> Callable[[Any], Any]:
         return wrapper
 
     return decorator
+
+
+def typed_property(name: str, expected_type: Type[Any]) -> property:
+    """Avoids definition of repetitive property class methods.
+
+    Simplifies type assertions on class attributes values.
+    Illustrates an important feature of inner functions or closures.
+
+    Args:
+        name (str): attribute name
+        expected_type (Type[Any]): expected type of class attribute
+
+    Example:
+        >>> class Person:
+        ...    name: property = typed_property("name", str)
+        ...    age: property = typed_property("age", int)
+        ...
+        ...    def __init__(self, name: str, age: int) -> None:
+        ...        self._name = name
+        ...        self._age = age
+        ...
+        >>> person: Person = Person(name="Luke", age=22)
+        >>> person.age = None  # raise `TypeError`
+    """
+    to_private_name: str = f"_{name}"
+
+    @property  # type: ignore
+    def prop(self: Any) -> Any:
+        """Returns value of an instance.
+
+        Args:
+            self (Any): an instance
+        """
+        return getattr(self, to_private_name)
+
+    @prop.setter
+    def prop(self: Any, value: Any) -> None:
+        """Returns value to instance attribute.
+
+        Args:
+            self (Any): an instance
+            value (Any): value to be set
+
+        Raises:
+            `TypeError` if attribute value does not match with expected type
+        """
+        if not isinstance(value, expected_type):
+            raise TypeError(f"'{name}' argument must be a '{expected_type}' type")
+        setattr(self, to_private_name, value)
+
+    return prop  # type: ignore

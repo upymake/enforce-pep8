@@ -130,6 +130,27 @@ Traceback (most recent call last):
 TypeError: Expected '<class 'str'>' type for 'color' attribute
 ```
 
+**Bad setter type**: not expected type for setter argument
+```python
+from punish.type import typed_property
+
+
+class Person:
+    name: property = typed_property("name", str)
+    age: property = typed_property("age", int)
+
+    def __init__(self, name: str, age: int) -> None:
+        self._name = name
+        self._age = age
+
+
+person: Person = Person(name="Luke", age=22)
+person.age = None
+
+Traceback (most recent call last):
+  File "<stdin>", line 5, in __init__
+TypeError: 'age' argument must be a '<class 'int'>' type
+```
 ### Source code
 
 ```bash
