@@ -1,6 +1,11 @@
 Versions
 ========
 
+0.0.4 (08.04.2020)
+=======
+- Avoid repetitive property methods definition
+- Introduce 'no duplicate attributes' metaclass
+
 0.0.3 (06.04.2020)
 =======
 - Enforce type checking for arguments
