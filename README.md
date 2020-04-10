@@ -12,6 +12,7 @@
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/enforce-pep8.svg)](https://pypi.python.org/pypi/enforce-pep8/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/enforce-pep8.svg)](https://pypi.python.org/pypi/enforce-pep8/)
+[![CodeFactor](https://www.codefactor.io/repository/github/vyahello/enforce-pep8/badge)](https://www.codefactor.io/repository/github/vyahello/enforce-pep8)
 
 # Enforce PEP-8
 
