@@ -13,6 +13,7 @@
 [![PyPI version shields.io](https://img.shields.io/pypi/v/enforce-pep8.svg)](https://pypi.python.org/pypi/enforce-pep8/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/enforce-pep8.svg)](https://pypi.python.org/pypi/enforce-pep8/)
 [![CodeFactor](https://www.codefactor.io/repository/github/vyahello/enforce-pep8/badge)](https://www.codefactor.io/repository/github/vyahello/enforce-pep8)
+[![Downloads](https://pepy.tech/badge/enforce-pep8)](https://pepy.tech/project/enforce-pep8)
 
 # Enforce PEP-8
 
