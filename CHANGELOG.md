@@ -1,6 +1,13 @@
 Versions
 ========
 
+0.0.5 (10.04.2020)
+=======
+- Cover 'abstractstyle' decorator with unittests
+- Count number of downloads
+- Introduce 'abstract style' method
+- Add codefactor badge
+
 0.0.4 (08.04.2020)
 =======
 - Avoid repetitive property methods definition

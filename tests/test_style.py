@@ -12,7 +12,8 @@ from punish.style import (
     SignatureError,
     SingletonMeta,
     _AnyCallable,
-    abstractstyle)
+    abstractstyle,
+)
 import pytest
 
 

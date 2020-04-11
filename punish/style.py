@@ -4,8 +4,8 @@ Allows to examine the contents of a class at the time of definition.
 
 Once a PEP8 metaclass has been specified for a class, it gets inherited by all of the subclasses.
 """
+import abc
 import re
-from abc import ABCMeta, abstractmethod
 from collections import OrderedDict
 from inspect import Signature, signature
 from typing import Any, Callable, Dict, Optional, Tuple
@@ -38,7 +38,7 @@ def abstractstyle(callable_object: _AnyCallable) -> _AnyCallable:
         >>> Child()
         ... TypeError: Can't instantiate abstract class Base with abstract methods name
     """
-    return abstractmethod(callable_object)
+    return abc.abstractmethod(callable_object)
 
 
 class BadAttributeNameError(Exception):
@@ -230,7 +230,9 @@ class NoDuplicateMeta(type):
         return NoDuplicateDict(class_name)
 
 
-class PepStyleMeta(ABCMeta, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta, NoDuplicateMeta):
+class PepStyleMeta(
+    abc.ABCMeta, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta, NoDuplicateMeta
+):
     """A metaclass forces PEP-8 convention coding styles.
 
     Examines the contents of a class at the time of definition.
