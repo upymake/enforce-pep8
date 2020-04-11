@@ -16,13 +16,27 @@ _AnyCallable = Callable[..., Any]
 def abstractstyle(callable_object: _AnyCallable) -> _AnyCallable:
     """A decorator indicating abstract style methods.
 
-    Ans AbstractStyle class cannot be instantiated unless all of its abstract methods are overridden.
+    An AbstractStyle class cannot be instantiated unless all of its abstract methods are overridden.
 
     Args:
         callable_object (Callable[[Any, ...], Any]):
 
     Returns:
         a callable object
+
+    Example:
+        >>> class Base(AbstractStyle):
+        ...     @abstractstyle
+        ...     def name(self) -> None:
+        ...         pass
+        ...
+        ...
+        ...     class Child(Base):
+        ...         pass
+        ...
+        ...
+        >>> Child()
+        ... TypeError: Can't instantiate abstract class Base with abstract methods name
     """
     return abstractmethod(callable_object)
 

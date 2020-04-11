@@ -12,7 +12,7 @@ from punish.style import (
     SignatureError,
     SingletonMeta,
     _AnyCallable,
-)
+    abstractstyle)
 import pytest
 
 
@@ -168,3 +168,16 @@ def test_singleton_meta() -> None:
 
 def test_any_callable() -> None:
     assert isinstance(_AnyCallable, Callable)
+
+
+def test_abstractstyle() -> None:
+    class Base(AbstractStyle):
+        @abstractstyle
+        def make(self) -> None:
+            pass
+
+    class Child(Base):
+        pass
+
+    with pytest.raises(TypeError):
+        Child()
