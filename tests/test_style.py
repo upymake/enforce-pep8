@@ -1,3 +1,4 @@
+from typing import Callable
 from punish.style import (
     AbstractStyle,
     BadAttributeNameError,
@@ -10,6 +11,7 @@ from punish.style import (
     PepStyleMeta,
     SignatureError,
     SingletonMeta,
+    _AnyCallable,
 )
 import pytest
 
@@ -162,3 +164,7 @@ def test_singleton_meta() -> None:
         pass
 
     assert Singleton() is Singleton() is Singleton()
+
+
+def test_any_callable() -> None:
+    assert isinstance(_AnyCallable, Callable)
