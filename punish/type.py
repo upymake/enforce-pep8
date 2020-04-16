@@ -5,7 +5,9 @@ Allows to examine the contents of a class at the time of definition.
 from collections import OrderedDict
 from functools import wraps
 from inspect import Signature, signature
-from typing import Any, Callable, Dict, List, Tuple, Type
+from types import TracebackType
+from typing import Any, Callable, ContextManager, Dict, List, Optional, Tuple, Type
+from punish.style import AbstractStyle, abstractstyle
 
 
 class Typed:
@@ -212,3 +214,46 @@ def typed_property(name: str, expected_type: Type[Any]) -> property:
         setattr(self, to_private_name, value)
 
     return prop  # type: ignore
+
+
+class AbstractContextManager(AbstractStyle, ContextManager["AbstractContextManager"]):
+    """An interface describing an abstract friendly context manager connection.
+
+    Example:
+        >>> class Database(AbstractContextManager):
+        ...    def __init__(self, source: list) -> None:
+        ...        self._db = source
+        ...
+        ...    def __enter__(self) -> "AbstractContextManager":
+        ...        self._db.extend((1, 2, 3))
+        ...        return self
+        ...
+        ...    def __exit__(
+        ...        self,
+        ...        exception_type: Optional[Type[BaseException]],
+        ...        exception_value: Optional[BaseException],
+        ...        traceback: Optional[TracebackType],
+        ...    ) -> None:
+        ...        self._db.pop(1)
+        ...
+        >>> with Database([10]) as db:
+        ...     ...
+    """
+
+    @abstractstyle
+    def __enter__(self) -> Any:
+        """Returns runtime connection itself."""
+        pass
+
+    @abstractstyle  # noqa: U100
+    def __exit__(  # noqa: U100
+        self,
+        exception_type: Optional[Type[BaseException]],
+        exception_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
+        """Closes connection itself.
+
+        Raises any exception triggered within the runtime context.
+        """
+        pass

@@ -1,5 +1,15 @@
-from typing import Any, Dict
-from punish.type import Float, Integer, OrderTypedMeta, String, Typed, enforce_type, typed_property
+from types import TracebackType
+from typing import Any, Dict, List, Optional, Type
+from punish.type import (
+    AbstractContextManager,
+    Float,
+    Integer,
+    OrderTypedMeta,
+    String,
+    Typed,
+    enforce_type,
+    typed_property,
+)
 import pytest
 
 
@@ -85,3 +95,29 @@ def test_badly_typed_property() -> None:
 
     with pytest.raises(TypeError):
         Person(age=20).age = None
+
+
+def test_abstract_context_manager() -> None:
+    class Database(AbstractContextManager):
+        def __init__(self, product: List[str]) -> None:
+            self._product = product
+
+        def __enter__(self) -> "Database":
+            self._product.extend(map(str, range(3)))
+            return self
+
+        def __len__(self) -> int:
+            return len(self._product)
+
+        def __exit__(
+            self,
+            exception_type: Optional[Type[BaseException]],
+            exception_value: Optional[BaseException],
+            traceback: Optional[TracebackType],
+        ) -> None:
+            self._product.clear()
+
+    with Database(product=["foo", "bar"]) as database:  # type: Database
+        assert len(database) == 5
+
+    assert not len(database)
