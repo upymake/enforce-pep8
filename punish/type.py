@@ -6,7 +6,7 @@ from collections import OrderedDict
 from functools import wraps
 from inspect import Signature, signature
 from types import TracebackType
-from typing import Any, Callable, ContextManager, Dict, List, Optional, Tuple, Type
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 from punish.style import AbstractStyle, abstractstyle
 
 
@@ -216,7 +216,7 @@ def typed_property(name: str, expected_type: Type[Any]) -> property:
     return prop  # type: ignore
 
 
-class AbstractContextManager(AbstractStyle, ContextManager["AbstractContextManager"]):
+class AbstractContextManager(AbstractStyle):
     """An interface describing an abstract friendly context manager connection.
 
     Example:
@@ -236,8 +236,7 @@ class AbstractContextManager(AbstractStyle, ContextManager["AbstractContextManag
         ...    ) -> None:
         ...        self._db.pop(1)
         ...
-        >>> with Database([10]) as db:
-        ...     ...
+        >>>
     """
 
     @abstractstyle

@@ -1,6 +1,10 @@
 Versions
 ========
 
+0.0.6 (16.04.2020)
+=======
+- Implement 'abstract context manager' type
+
 0.0.5 (10.04.2020)
 =======
 - Cover 'abstractstyle' decorator with unittests
