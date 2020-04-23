@@ -1,6 +1,13 @@
 Versions
 ========
 
+0.0.7
+=======
+
+_Release date: 23.04.2020_
+
+- Update code badges according to transition into organisation
+
 0.0.6
 =======
 
