@@ -1,8 +1,8 @@
 ![Screenshot](logo.png)
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![Build Status](https://travis-ci.org/vyahello/enforce-pep8.svg?branch=master)](https://travis-ci.org/vyahello/enforce-pep8)
-[![Coverage Status](https://coveralls.io/repos/github/vyahello/enforce-pep8/badge.svg?branch=master)](https://coveralls.io/github/vyahello/enforce-pep8?branch=master)
+[![Build Status](https://travis-ci.org/upymake/enforce-pep8.svg?branch=master)](https://travis-ci.org/upymake/enforce-pep8)
+[![Coverage Status](https://coveralls.io/repos/github/upymake/enforce-pep8/badge.svg?branch=master)](https://coveralls.io/github/upymake/enforce-pep8?branch=master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with pylint](https://img.shields.io/badge/pylint-checked-blue)](https://www.pylint.org)
 [![Checked with flake8](https://img.shields.io/badge/flake8-checked-blue)](http://flake8.pycqa.org/)
