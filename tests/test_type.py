@@ -1,3 +1,4 @@
+# pylint: disable-all
 from types import TracebackType
 from typing import Any, Dict, List, Optional, Type
 from punish.type import (

@@ -1,3 +1,4 @@
+# pylint: disable-all
 from typing import Callable
 from punish.style import (
     AbstractStyle,
