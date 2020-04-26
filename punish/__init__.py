@@ -30,10 +30,11 @@ from punish.type import (
     enforce_type,
     typed_property,
 )
+
 __author__: str = "Volodymyr Yahello"
 __email__: str = "vyahello@gmail.com"
 __package_name__: str = "enforce-pep8"
-__version__: str = "0.0.7"
+__version__: str = "0.0.8"
 
 __all__: Tuple[str, ...] = (
     "AbstractStyle",

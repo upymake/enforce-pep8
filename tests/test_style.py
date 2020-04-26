@@ -146,6 +146,7 @@ def test_abstract_style_signature():
 
 def test_abstract_style_duplicate() -> None:
     with pytest.raises(DuplicateAttributeError):
+
         class Stylish(AbstractStyle):
             def name(self) -> None:
                 pass
