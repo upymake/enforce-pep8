@@ -1,6 +1,15 @@
 Versions
 ========
 
+0.0.8
+=======
+
+_Release date: 26.04.2020_
+
+- Define public interfaces
+- Update project image icon
+- Disable 'pylint' for unittests
+
 0.0.7
 =======
 
