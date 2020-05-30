@@ -81,7 +81,6 @@ DOC
       check-flake8 && \
       check-unittests
     )
-    return 0
 }
 
 main
