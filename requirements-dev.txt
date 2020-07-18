@@ -22,3 +22,4 @@ flake8-pytest-style==1.0.0
 coverage==5.0.4
 coveralls==1.11.1
 interrogate==1.2.0
+check-manifest==0.42

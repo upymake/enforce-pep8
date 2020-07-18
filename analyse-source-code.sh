@@ -60,6 +60,14 @@ DOC
 }
 
 
+check-pymanifest() {
+:<<DOC
+    Runs unittests using "check-manifest" tool
+DOC
+    pretty-printer-box "check-manifest" && check-manifest -v ./
+}
+
+
 check-unittests() {
 :<<DOC
     Runs unittests using "pytest" framework
@@ -79,6 +87,7 @@ DOC
       check-pylint && \
       check-docstrings && \
       check-flake8 && \
+      check-pymanifest && \
       check-unittests
     )
 }
