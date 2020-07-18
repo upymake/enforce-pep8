@@ -1,6 +1,14 @@
 Versions
 ========
 
+0.0.9
+=======
+
+_Release date: 18.07.2020_
+
+- Include check manifest into static analysis
+- Introduce frozen dataset metaclass
+
 0.0.8
 =======
 
