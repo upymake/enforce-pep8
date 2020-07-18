@@ -34,6 +34,9 @@
   - [mypy](http://mypy.readthedocs.io/en/latest)
   - [pylint](https://www.pylint.org/)
   - [flake8](http://flake8.pycqa.org/en/latest/)
+  - [pydocstyle](http://www.pydocstyle.org/en/2.1.1/usage.html)
+  - [interrogate](https://interrogate.readthedocs.io/en/latest)
+  - [check-manifest](https://pypi.org/project/check-manifest)
 
 ## Usage
 
