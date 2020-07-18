@@ -1,9 +1,11 @@
 # pylint: disable-all
+from dataclasses import FrozenInstanceError
 from types import TracebackType
 from typing import Any, Dict, List, Optional, Type
 from punish.type import (
     AbstractContextManager,
     Float,
+    FrozenMeta,
     Integer,
     OrderTypedMeta,
     String,
@@ -122,3 +124,13 @@ def test_abstract_context_manager() -> None:
         assert len(database) == 5
 
     assert not len(database)
+
+
+def test_frozen_meta() -> None:
+    class Bio(metaclass=FrozenMeta):
+        name: str = 'Luke'
+        company: str = 'Cisco'
+
+    bio = Bio()
+    with pytest.raises(FrozenInstanceError):
+        bio.name = 'Amir'

@@ -107,7 +107,8 @@ class NoMixedCaseMeta(type):
             namespace (dict): class namespace as a dictionary
 
         Raises:
-            `BadAttributeNameError` if name of an attribute is specified in mixedcase style e.g fooBar
+            `BadAttributeNameError` if name of an attribute is specified in
+             mixedcase style e.g fooBar
         """
         for attr_name, value in namespace.items():  # type: str, Any
             if re.compile(mcs.__camelcase_pattern).match(attr_name) or (

@@ -154,6 +154,22 @@ Traceback (most recent call last):
   File "<stdin>", line 5, in __init__
 TypeError: 'age' argument must be a '<class 'int'>' type
 ```
+
+**Frozen class attributes**: it is forbidden to modify class attributes 
+```python
+from punish.type import FrozenMeta
+
+
+class Bio(metaclass=FrozenMeta):
+    name: str = 'Luke'
+    company: str = 'Cisco'
+
+
+bio = Bio()
+bio.name = 'Amir'
+dataclasses.FrozenInstanceError: cannot assign to field 'name'
+```
+
 ### Source code
 
 ```bash

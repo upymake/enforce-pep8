@@ -3,6 +3,7 @@
 Allows to examine the contents of a class at the time of definition.
 """
 from collections import OrderedDict
+from dataclasses import dataclass
 from functools import wraps
 from inspect import Signature, signature
 from types import TracebackType
@@ -64,7 +65,7 @@ class OrderTypedMeta(type):
     """A metaclass for ordered attributes.
 
     Allows to record the order in which attributes and methods are defined
-    inside the class body so the you cna use it in various operations (e.g serializing)
+    inside the class body so the you can use it in various operations (e.g serializing)
 
     Captures definition order of descriptions (`Typed` subclassed).
     """
@@ -256,3 +257,31 @@ class AbstractContextManager(AbstractStyle):
         Raises any exception triggered within the runtime context.
         """
         pass
+
+
+class FrozenMeta(type):
+    """A metaclass for frozen dataset attributes.
+
+    A user will not be able set class attributes externally thus setters are forbidden.
+    It uses dataclass functionality.
+    """
+
+    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
+        """Creates and returns new object.
+
+        Args:
+            class_name (str): name of a class to be created
+            bases (tuple): a set of base classes inherited from
+            namespace (dict): class namespace as a dictionary
+
+        Example:
+        >>> class Bio(metaclass=FrozenMeta):
+        ...     name: str = 'Luke'
+        ...     company: str = 'Cisco'
+        >>>
+        >>> bio = Bio()
+        >>> bio.name = 'Sam'
+        dataclasses.FrozenInstanceError: cannot assign to field 'name'
+        """
+        new_class = super().__new__(mcs, class_name, bases, namespace)
+        return dataclass(unsafe_hash=True, frozen=True)(new_class)
