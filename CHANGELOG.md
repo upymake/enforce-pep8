@@ -1,6 +1,13 @@
 Versions
 ========
 
+0.0.10
+=======
+
+_Release date: 20.07.2020_
+
+- Define abstract style as an abstract base class
+
 0.0.9
 =======
 
