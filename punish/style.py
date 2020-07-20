@@ -8,7 +8,7 @@ import abc
 import re
 from collections import OrderedDict
 from inspect import Signature, signature
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, Optional, Tuple, Type
 
 _AnyCallable = Callable[..., Any]
 
@@ -252,24 +252,6 @@ class PepStyleMeta(
     pass
 
 
-class AbstractStyle(metaclass=PepStyleMeta):
-    """The class represents abstract base class to enforce PEP8 coding style conventions.
-
-    Derive from it to make PEP8 coding punishment (it will make effect while definition) e.g:
-
-    >>> class Root(AbstractStyle):
-    ...    pass
-    ...
-    ...
-    ...  class Child(Root):
-    ...    pass
-    ...
-    >>>
-    """
-
-    pass
-
-
 class SingletonMeta(type):
     """A metaclass that makes from class object a singleton unity.
 
@@ -307,3 +289,23 @@ class SingletonMeta(type):
             cls.__instance = super().__call__(*args, **kwargs)
             return cls.__instance
         return cls.__instance
+
+
+class AbstractStyle(abc.ABC, metaclass=PepStyleMeta):
+    """The class represents abstract base class to enforce PEP8 coding style conventions.
+
+    Derive from it to make PEP8 coding punishment (it will make effect while definition) e.g:
+
+    >>> class Root(AbstractStyle):
+    ...    pass
+    ...
+    ...
+    ...  class Child(Root):
+    ...    pass
+    ...
+    >>>
+    """
+
+    __slots__: Tuple[str, ...] = ()
+    __metaclass__: Type[PepStyleMeta] = PepStyleMeta
+    __abc_name__: str = 'AbstractStyle'
