@@ -1,6 +1,13 @@
 Versions
 ========
 
+0.0.11
+=======
+
+_Release date: 09.10.2020_
+
+-  Allow csv for pytest parametrization
+
 0.0.10
 =======
 
