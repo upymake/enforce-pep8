@@ -3,6 +3,11 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
+addons:
+  apt:
+    update: true
+env:
+  - PACKAGE_NAME=enforce-pep8 PACKAGE_VERSION=0.0.11
 before_install:
   - pip install pip -U
   - pip install -r requirements-dev.txt -U
