@@ -1,4 +1,4 @@
 prune .idea
-include .* *.png *.md *.ini *.in *.yml *.toml *.sh *.txt
+include .* *.png *.md *.ini *.in *.yml *.toml *.sh *.txt *.bats
 exclude .coverage .python-version .gitignore .mypy* .pytest*
 recursive-include tests .* *.png *.pt *.txt *.md *.ini *.in *.yml *.toml *.sh *.py
