@@ -13,6 +13,7 @@
 [![PyPI version shields.io](https://img.shields.io/pypi/v/enforce-pep8.svg)](https://pypi.python.org/pypi/enforce-pep8/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/enforce-pep8.svg)](https://pypi.python.org/pypi/enforce-pep8/)
 [![CodeFactor](https://www.codefactor.io/repository/github/upymake/enforce-pep8/badge)](https://www.codefactor.io/repository/github/upymake/enforce-pep8)
+[![PyPi downloads](https://img.shields.io/pypi/dm/enforce-pep8.svg)](https://pypi.python.org/pypi/enforce-pep8)
 [![Downloads](https://pepy.tech/badge/enforce-pep8)](https://pepy.tech/project/enforce-pep8)
 
 # Enforce PEP-8
@@ -26,17 +27,21 @@
 
 ## Tools
 
+### Production
+
 - python 3.6, 3.7, 3.8
-- [travis](https://travis-ci.org) CI
-- code analysis
-  - [pytest](https://pypi.org/project/pytest/)
-  - [black](https://black.readthedocs.io/en/stable/)
-  - [mypy](http://mypy.readthedocs.io/en/latest)
-  - [pylint](https://www.pylint.org/)
-  - [flake8](http://flake8.pycqa.org/en/latest/)
-  - [pydocstyle](http://www.pydocstyle.org/en/2.1.1/usage.html)
-  - [interrogate](https://interrogate.readthedocs.io/en/latest)
-  - [check-manifest](https://pypi.org/project/check-manifest)
+
+### Development
+
+- [pytest](https://pypi.org/project/pytest/)
+- [black](https://black.readthedocs.io/en/stable/)
+- [mypy](http://mypy.readthedocs.io/en/latest)
+- [pylint](https://www.pylint.org/)
+- [flake8](http://flake8.pycqa.org/en/latest/)
+- [pydocstyle](http://www.pydocstyle.org/en/2.1.1/usage.html)
+- [interrogate](https://interrogate.readthedocs.io/en/latest)
+- [check-manifest](https://pypi.org/project/check-manifest)
+- [travis](https://travis-ci.org)
 
 ## Usage
 
