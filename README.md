@@ -1,4 +1,4 @@
-![Screenshot](icon.png)
+![Screenshot](logo.png)
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Build Status](https://travis-ci.org/upymake/enforce-pep8.svg?branch=master)](https://travis-ci.org/upymake/enforce-pep8)
