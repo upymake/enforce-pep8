@@ -1,7 +1,7 @@
 [tool.black]
-line-length = 100
+line-length = 80
 skip-string-normalization = true
-target-version = ["py36", "py37", "py38"]
+target-version = ["py36", "py37", "py38", "py39"]
 exclude = '''
 /(
     \.pytest_cache

@@ -30,7 +30,9 @@ class Typed:
             value (Any): value to be set
         """
         if not isinstance(value, self._expected_type):
-            raise TypeError(f"Expected '{self._expected_type}' type for '{self._name}' attribute")
+            raise TypeError(
+                f"Expected '{self._expected_type}' type for '{self._name}' attribute"
+            )
         instance.__dict__[self._name] = value
 
 
@@ -70,7 +72,9 @@ class OrderTypedMeta(type):
     Captures definition order of descriptions (`Typed` subclassed).
     """
 
-    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
+    def __new__(
+        mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]
+    ) -> Any:
         """Creates and returns new ordered object.
 
         Args:
@@ -102,7 +106,9 @@ class OrderTypedMeta(type):
 
     @classmethod  # noqa: U100
     def __prepare__(  # type: ignore # noqa: U100
-        mcs, class_name: str, bases: Tuple[type, ...]  # pylint: disable=unused-argument
+        mcs,
+        class_name: str,  # pylint: disable=unused-argument
+        bases: Tuple[type, ...],  # pylint: disable=unused-argument
     ) -> Dict[str, Any]:
         """Creates class namespace.
 
@@ -158,7 +164,9 @@ def enforce_type(*type_args: Any, **type_kwargs: Any) -> Callable[[Any], Any]:
             ).arguments.items():  # type: str, Any
                 if name in bound_types:
                     if not isinstance(value, bound_types[name]):
-                        raise TypeError(f"Argument '{name}' must be '{bound_types[name]}' type")
+                        raise TypeError(
+                            f"Argument '{name}' must be '{bound_types[name]}' type"
+                        )
             return func(*args, **kwargs)  # type: ignore
 
         return wrapper
@@ -211,7 +219,9 @@ def typed_property(name: str, expected_type: Type[Any]) -> property:
             `TypeError` if attribute value does not match with expected type
         """
         if not isinstance(value, expected_type):
-            raise TypeError(f"'{name}' argument must be a '{expected_type}' type")
+            raise TypeError(
+                f"'{name}' argument must be a '{expected_type}' type"
+            )
         setattr(self, to_private_name, value)
 
     return prop  # type: ignore
@@ -266,7 +276,9 @@ class FrozenMeta(type):
     It uses dataclass functionality.
     """
 
-    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
+    def __new__(
+        mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]
+    ) -> Any:
         """Creates and returns new object.
 
         Args:

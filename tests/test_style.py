@@ -69,7 +69,9 @@ def test_no_match_signature_meta() -> None:
     with pytest.raises(SignatureError):
 
         class Sub(Base):
-            def check(self, name: str, value: str, not_expected_argument: bool = False) -> None:
+            def check(
+                self, name: str, value: str, not_expected_argument: bool = False
+            ) -> None:
                 pass
 
 
@@ -111,7 +113,14 @@ def test_duplicate_meta() -> None:
 
 
 @pytest.mark.parametrize(
-    "object_type", (type, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta, NoDuplicateMeta)
+    "object_type",
+    (
+        type,
+        NoLowerCaseMeta,
+        NoMixedCaseMeta,
+        MatchSignatureMeta,
+        NoDuplicateMeta,
+    ),
 )
 def test_style_meta_instance(object_type: type) -> None:
     assert isinstance(PepStyleMeta("Stylish", (), {}), object_type)

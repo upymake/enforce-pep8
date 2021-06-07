@@ -73,7 +73,10 @@ class SignatureError(Exception):
     """
 
     def __init__(
-        self, class_name: str, previous_signature: Signature, current_signature: Signature
+        self,
+        class_name: str,
+        previous_signature: Signature,
+        current_signature: Signature,
     ) -> None:
         super().__init__(
             f"Signature mismatch in '{class_name}', {previous_signature} != {current_signature}"
@@ -87,7 +90,9 @@ class DuplicateAttributeError(Exception):
     """
 
     def __init__(self, attribute_name: str, class_name: str) -> None:
-        super().__init__(f"'{attribute_name}' attribute is already defined in '{class_name}' class")
+        super().__init__(
+            f"'{attribute_name}' attribute is already defined in '{class_name}' class"
+        )
 
 
 class NoMixedCaseMeta(type):
@@ -98,7 +103,9 @@ class NoMixedCaseMeta(type):
 
     __camelcase_pattern: str = "([a-z]+[A-Z]+).*"
 
-    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
+    def __new__(
+        mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]
+    ) -> Any:
         """Creates and returns new PEP-8 verified object.
 
         Args:
@@ -121,7 +128,9 @@ class NoMixedCaseMeta(type):
 class NoLowerCaseMeta(type):
     """A metaclass that rejects any class definition containing classes with lower-case names."""
 
-    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
+    def __new__(
+        mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]
+    ) -> Any:
         """Creates and returns new PEP-8 verified object.
 
         Args:
@@ -144,7 +153,9 @@ class MatchSignatureMeta(type):
     Useful in catching subtle program bugs in argument names.
     """
 
-    def __init__(cls, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> None:
+    def __init__(
+        cls, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]
+    ) -> None:
         """Instantiates new PEP-8 verified object.
 
         Args:
@@ -165,7 +176,11 @@ class MatchSignatureMeta(type):
                 previous_signature: Signature = signature(previous_defined)
                 current_signature: Signature = signature(value)
                 if previous_signature != current_signature:
-                    raise SignatureError(value.__qualname__, previous_signature, current_signature)
+                    raise SignatureError(
+                        value.__qualname__,
+                        previous_signature,
+                        current_signature,
+                    )
 
 
 class NoDuplicateDict(OrderedDict):  # type: ignore
@@ -193,11 +208,13 @@ class NoDuplicateDict(OrderedDict):  # type: ignore
 class NoDuplicateMeta(type):
     """A metaclass rejects defined duplicated attributes in a class."""
 
-    def __new__(mcs, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> Any:
+    def __new__(
+        mcs, cls_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]
+    ) -> Any:
         """Creates and returns new object.
 
         Args:
-            class_name (str): name of a class to be created
+            cls_name (str): name of a class to be created
             bases (tuple): a set of base classes inherited from
             namespace (dict): class namespace as a dictionary
 
@@ -212,12 +229,16 @@ class NoDuplicateMeta(type):
             ... TypeError: 'name' attribute is already defined in 'Spam' class
         """
         from_namespace: Dict[str, Any] = dict(namespace)
-        from_namespace["_order"] = [name for name in namespace if not name.startswith("_")]
-        return type.__new__(mcs, class_name, bases, from_namespace)
+        from_namespace["_order"] = [
+            name for name in namespace if not name.startswith("_")
+        ]
+        return type.__new__(mcs, cls_name, bases, from_namespace)
 
     @classmethod  # noqa: U100
     def __prepare__(  # type: ignore # noqa: U100
-        mcs, class_name: str, bases: Tuple[type, ...]  # pylint: disable=unused-argument
+        mcs,
+        cls_name: str,
+        bases: Tuple[type, ...],  # pylint: disable=unused-argument
     ) -> Dict[str, Any]:
         """Creates class namespace.
 
@@ -225,14 +246,18 @@ class NoDuplicateMeta(type):
         Namespace dictionary is returned.
 
         Args:
-            class_name (str): name of a class to be created
+            cls_name (str): name of a class to be created
             bases (tuple): a set of base classes inherited from
         """
-        return NoDuplicateDict(class_name)
+        return NoDuplicateDict(cls_name)
 
 
 class PepStyleMeta(
-    abc.ABCMeta, NoLowerCaseMeta, NoMixedCaseMeta, MatchSignatureMeta, NoDuplicateMeta
+    abc.ABCMeta,
+    NoLowerCaseMeta,
+    NoMixedCaseMeta,
+    MatchSignatureMeta,
+    NoDuplicateMeta,
 ):
     """A metaclass forces PEP-8 convention coding styles.
 
@@ -258,7 +283,9 @@ class SingletonMeta(type):
     It will be instantiated only once.
     """
 
-    def __init__(cls, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> None:
+    def __init__(
+        cls, class_name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]
+    ) -> None:
         """Initializes a singleton object.
 
         Args:

@@ -34,9 +34,15 @@ def test_correctly_typed() -> None:
 @pytest.mark.parametrize(
     "evaluated_type",
     (
-        pytest.param(lambda: __Stock(name=None, shares=10, price=21.1), id="String"),
-        pytest.param(lambda: __Stock(name="foo", shares=None, price=21.1), id="Integer"),
-        pytest.param(lambda: __Stock(name="foo", shares=10, price=None), id="Float"),
+        pytest.param(
+            lambda: __Stock(name=None, shares=10, price=21.1), id="String"
+        ),
+        pytest.param(
+            lambda: __Stock(name="foo", shares=None, price=21.1), id="Integer"
+        ),
+        pytest.param(
+            lambda: __Stock(name="foo", shares=10, price=None), id="Float"
+        ),
     ),
 )
 def test_badly_typed(evaluated_type: callable) -> None:
@@ -46,7 +52,9 @@ def test_badly_typed(evaluated_type: callable) -> None:
 
 def test_enforce_good_type() -> None:
     @enforce_type(foo=bool, bar=int, tez=int)
-    def spam(foo: bool, bar: int, tez: int = 42) -> Dict[str, Any]:  # noqa: VNE002
+    def spam(
+        foo: bool, bar: int, tez: int = 42  # noqa: VNE002
+    ) -> Dict[str, Any]:
         return locals()
 
     @enforce_type(foo=bool, bar=int)
@@ -61,7 +69,9 @@ def test_enforce_good_type() -> None:
 
 def test_enforce_bad_type() -> None:
     @enforce_type(foo=bool, bar=int, tez=int)
-    def spam(foo: bool, bar: int, tez: int = 42) -> Dict[str, Any]:  # noqa: VNE002
+    def spam(
+        foo: bool, bar: int, tez: int = 42  # noqa: VNE002
+    ) -> Dict[str, Any]:
         return locals()
 
     with pytest.raises(TypeError):
