@@ -1,6 +1,16 @@
 Versions
 ========
 
+
+0.0.12
+=======
+
+_Release date: 06.07.2021_
+
+- Support python 3.9
+- Bump dev requirements
+- Add new project logo
+
 0.0.11
 =======
 
